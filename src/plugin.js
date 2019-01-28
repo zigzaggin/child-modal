@@ -2,27 +2,25 @@ import qs from "query-string";
 
 export default {
   install(Vue) {
-    const state = {};
+    const state = [];
 
-    function popPosition(position) {
-      let f = state[position];
+    function popLast() {
+      let f = state.pop();
       if (f) {
         f();
       }
-      delete state[position];
     }
 
     window.onpopstate = function(event) {
       if (event.state && event.state.position) {
-        let position = event.state.position;
-        popPosition(position);
+        popLast();
       }
     };
 
     Vue.prototype.$history = {
       addBackObserver: function(f) {
-        let position = Object.keys(state).length + 1;
-        state[position] = f;
+        let position = state.length + 1;
+        state.push(f);
 
         if (window.history) {
           if (position === 1)
@@ -35,11 +33,11 @@ export default {
       },
       popState: function() {
         if (window.history) window.history.back();
-        else popPosition(Object.keys(state).length);
+        else popLast();
       },
       go: function(d) {
         if (window.history) window.history.go(d);
-        else popPosition(Object.keys(state).length);
+        else popLast();
       }
     };
 

@@ -56,5 +56,8 @@ span {
   + span {
     margin-left: 10px;
   }
+  &.btn {
+    display: block;
+  }
 }
 </style>
