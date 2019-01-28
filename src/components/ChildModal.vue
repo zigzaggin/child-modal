@@ -1,5 +1,5 @@
 <template>
-  <Modal title="Modal 1" v-if="amIOpen" :cancel="onCancel">
+  <Modal title="Modal 1" v-if="amIOpen">
     <input type="text" v-model="r.id" /> <input type="text" v-model="r.name" />
     <span @click="save">GO</span>
   </Modal>
@@ -24,10 +24,6 @@ export default {
     };
   },
   methods: {
-    onCancel() {
-      console.log("cancel!");
-      this.close();
-    },
     save() {
       this.$emit("update:result", { ...this.r });
       this.close();

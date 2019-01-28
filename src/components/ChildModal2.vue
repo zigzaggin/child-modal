@@ -1,12 +1,17 @@
 <template>
   <div>
-    <Modal title="Modal 2" v-if="amIOpen" :cancel="onCancel">
+    <Modal title="Modal 2" v-if="amIOpen">
       This is another sub modal
       <span class="btn" @click="openm2">Open Second Modal</span>
       <div>{{ r }}</div>
     </Modal>
 
-    <ChildModal title="What?" ref="m2" :result.sync="r"></ChildModal>
+    <ChildModal
+      title="What?"
+      ref="m2"
+      :result.sync="r"
+      :closed="onClose"
+    ></ChildModal>
   </div>
 </template>
 
@@ -25,11 +30,11 @@ export default {
     };
   },
   methods: {
-    onCancel() {
-      console.log("cancel!");
-      this.close();
+    onClose() {
+      this.amIOpen = true;
     },
     openm2() {
+      this.amIOpen = false;
       this.$refs.m2.open();
     }
   },

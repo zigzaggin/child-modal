@@ -10,22 +10,36 @@
 </template>
 
 <script>
-import open from "./open.mixin.js";
-
 export default {
-  mixins: [open],
   props: {
-    cancel: {
-      type: Function
-    },
     title: {
       default: ""
+    },
+    closed: {
+      type: Function
     }
   },
+  data() {
+    return {
+      amIOpen: false
+    };
+  },
   methods: {
+    close() {
+      if (typeof this.closed !== "undefined") this.closed();
+      this.$history.popState();
+    },
+    open() {
+      if (!this.amIOpen) {
+        this.amIOpen = true;
+        this.$history.addBackObserver(() => {
+          if (typeof this.closed !== "undefined") this.closed();
+          this.amIOpen = false;
+        });
+      }
+    },
     interalCancel() {
-      if (typeof this.cancel !== "undefined") this.cancel();
-      else this.close();
+      this.close();
     }
   }
 };
